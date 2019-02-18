@@ -33,29 +33,79 @@ Route::group(['prefix' => 'admin'], function(){
 
 		Route::get('danhsach', 'TheLoaiController@list');
 
-		Route::get('sua', 'TheLoaiController@edit');
+		Route::get('sua/{id}', 'TheLoaiController@edit');
+		Route::post('sua/{id}', 'TheLoaiController@postEdit');
 
 		Route::get('them', 'TheLoaiController@add');
+		Route::post('them', 'TheLoaiController@postAdd');
+
+		Route::get('xoa/{id}', 'TheLoaiController@delete');
 
 	});
 
 	Route::group(['prefix' => 'loaitin'], function(){
 
-		Route::get('danhsach', 'CateController@list');
+		Route::get('danhsach', 'LoaiTinController@list');
 
-		Route::get('sua', 'cateController@edit');
+		Route::get('sua/{id}', 'LoaiTinController@edit');
+		Route::post('sua/{id}', 'LoaiTinController@postEdit');
 
-		Route::get('them', 'cateController@add');
+		Route::get('them', 'LoaiTinController@add');
+		Route::post('them', 'LoaiTinController@postAdd');
+
+		Route::get('xoa/{id}', 'LoaiTinController@delete');
 
 	});
 
 	Route::group(['prefix' => 'tintuc'], function(){
 
-		Route::get('danhsach', 'CateController@list');
+		Route::get('danhsach', 'TinTucController@list');
 
-		Route::get('sua', 'cateController@edit');
+		Route::get('sua/{id}', 'TinTucController@edit');
+		Route::post('sua/{id}', 'TinTucController@postEdit');
 
-		Route::get('them', 'cateController@add');
+		Route::get('them', 'TinTucController@add');
+		Route::post('them', 'TinTucController@postAdd');
 
+		Route::get('xoa/{id}', 'TinTucController@delete');
+
+	});
+
+	Route::group(['prefix' => 'comment'], function(){
+
+		Route::get('xoa/{idTinTuc}/{id}', 'CommentController@delete');
+
+	});
+
+	Route::group(['prefix' => 'slide'], function(){
+
+		Route::get('danhsach', 'SlideController@list');
+
+		Route::get('sua/{id}', 'SlideController@edit');
+		Route::post('sua/{id}', 'SlideController@postEdit');
+
+		Route::get('them', 'SlideController@add');
+		Route::post('them', 'SlideController@postAdd');
+
+		Route::get('xoa/{id}', 'SlideController@delete');
+
+	});
+
+	Route::group(['prefix' => 'user'], function(){
+
+		Route::get('danhsach', 'UserController@list');
+
+		Route::get('sua/{id}', 'UserController@edit');
+		Route::post('sua/{id}', 'UserController@postEdit');
+
+		Route::get('them', 'UserController@add');
+		Route::post('them', 'UserController@postAdd');
+
+		Route::get('xoa/{id}', 'UserController@delete');
+
+	});
+
+	Route::group(['prefix' => 'ajax'], function(){
+		Route::get('loaitin/{idTheLoai}', 'AjaxController@getLoaiTin');
 	});
 });

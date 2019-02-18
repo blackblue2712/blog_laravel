@@ -29,6 +29,6 @@ class User extends Authenticatable
     ];
 
     public function commnent(){
-        return $this->hasMany('App\Comment', 'idUser', 'id')
+        return $this->hasMany('App\Comment', 'idUser', 'id');
     }
 }

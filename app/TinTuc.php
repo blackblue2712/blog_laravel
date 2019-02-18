@@ -13,7 +13,7 @@ class TinTuc extends Model
     	return $this->belongsTo('App\LoaiTin', 'idLoaiTin', 'id');
     }
 
-    public function commnet(){
-    	return $this->hasMany('App\Commnet', 'idTinTuc', 'id')
+    public function comment(){
+    	return $this->hasMany('App\Comment', 'idTinTuc', 'id');
     }
 }
