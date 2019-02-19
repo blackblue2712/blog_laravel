@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <title>Admin - Khoa Phạm</title>
-
+    <base href="{{asset('')}}">
     <!-- Bootstrap Core CSS -->
     <link href="admin_asset/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -27,12 +27,27 @@
 
     <div class="container">
         <div class="row">
+
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
+                        @if( count($errors) > 0 )
+                            <div class="alert alert-danger">
+                                @foreach($errors->all() as $err)
+                                    {{$err}}<br>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @if(session('thongbao'))
+                            <div class="alert alert-danger">{{session('thongbao')}}</div>
+                        @endif
+                        @if(session('loi'))
+                            <div class="alert alert-danger">{{session('loi')}}</div>
+                        @endif
                         <form role="form" action="" method="POST">
                             <fieldset>
                                 <div class="form-group">
@@ -41,6 +56,7 @@
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="">
                                 </div>
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
                             </fieldset>
                         </form>

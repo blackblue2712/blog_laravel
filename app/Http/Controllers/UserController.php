@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class UserController extends Controller
@@ -52,53 +53,78 @@ class UserController extends Controller
 
 
     public function edit($id){
-    	$slide  = Slide::find($id);
-    	return view('admin.slide.sua', ['slide' => $slide]);
+    	$user  = User::find($id);
+    	return view('admin.user.sua', ['user' => $user]);
     }
     public function postEdit(Request $req, $id){
-    	$slide = Slide::find($id);
+    	$user = User::find($id);
     	$this->validate($req, 
             [
-                'Ten' => 'required',
-                'NoiDung' => 'required',
+                'name' => 'required|min:3|unique:users,name,'.$id,
             ],
             [
-                'Ten.required' => 'Bạn chưa nhập tên',
-                'NoiDung.requried' => 'Bạn chưa nhập nội dung',
+                'name.required' => 'Bạn chưa nhập tên',
+                'name.unique' => 'Tên đã tồn tại',
+                'name.min' => 'Tên quá ngắn (từ 3 kí tự trở lên)',
             ]
         );
-
     	
-        $slide->Ten         = $req->Ten;
-        $slide->link        = $req->link;
-        $slide->NoiDung     = $req->NoiDung;
+        $user->name     = $req->name;
+        $user->quyen    = $req->quyen;
 
-        if($req->hasFile('Hinh')){
-            $file           = $req->file('Hinh');
-            $fileExtension  = $file->getClientOriginalExtension();
-            $arr_ex         = ['jpg', 'png', 'gif'];
-            if(!in_array($fileExtension, $arr_ex)){
-                return redirect('admin/slide/them')->with('loi', 'Phần mở rộng của hình ảnh phải là jpg, png, gif');
-            }
-            $filename       = $file->getClientOriginalName();
-            $randomName     = str_random(5) . '_' . $filename;
-            while(file_exists('upload/slide/' . $randomName)){
-                $randomName = str_random(5) . '_' . $filename;
-            }
-            $file->move('upload/slide', $randomName);
-            unlink('upload/slide/'.$slide->Hinh);
-            $slide->Hinh = $randomName;
+        if($req->changePassword == 'on'){
+            $this->validate($req, 
+                [
+                    'password' => 'required|min:3|max:32',
+                    'passwordAgain' => 'required|same:password'
+                ],
+                [
+                    'password.required' => 'Bạn chưa nhập mật khẩu',
+                    'password.min' => 'Mật khẩu quá ngắn (từ 3 đến 32 kí tự)',
+                    'password.max' => 'Mật khẩu quá dài (từ 3 đến 32 kí tự)',
+                    'passwordAgain.required' => 'Bạn chưa nhập lại mật khẩu',
+                    'passwordAgain.same'    => 'Mật khẩu nhập lại không khớp'
+                ]
+            );
+            $user->password = bcrypt($req->password);
         }
+        
 
-        $slide->save();
+        $user->save();
 
-        return redirect('admin/slide/sua/'.$id)->with('thongbao', 'Đã sửa thành công');
+        return redirect('admin/user/sua/'.$id)->with('thongbao', 'Đã sửa thành công');
     }
 
     public function delete($id){
-    	$slide = Slide::find($id);
-    	@unlink('upload/slide/'.$slide->Hinh);
-    	$slide->delete();
-    	return redirect('admin/slide/danhsach')->with('thongbao', 'Đã xoá thành công');
+    	$user = User::find($id);
+    	$user->delete();
+    	return redirect('admin/user/danhsach')->with('thongbao', 'Đã xoá thành công');
     }
+
+    // LOGIN
+    public function getDangnhapAdmin(){
+        return view('admin.login');
+    }
+    public function postDangnhapAdmin(Request $req){        
+        $this->validate($req,
+            [
+                'email' => 'required',
+                'password' => 'required'
+            ],
+            [
+                'email.required' => 'Bạn chưa nhập email',
+                'password.required' => 'Bạn chưa nhập mật khẩu'
+            ]
+        );
+
+        if(Auth::attempt(['email' => $req->email, 'password' =>$req->password])){
+            return redirect('admin/theloai/danhsach');
+        }else{
+            return redirect('admin/dangnhap')->with('thongbao', 'Email hoặc password không hợp lệ');
+        }
+    }  
+    public function getDangxuatAdmin(){
+        Auth::logout();
+        return redirect('admin/dangnhap');
+    } 
 }

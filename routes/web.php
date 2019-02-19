@@ -28,7 +28,11 @@ Route::get('testGUI', function(){
 	return view('admin.theloai.danhsach');
 });
 
-Route::group(['prefix' => 'admin'], function(){
+Route::get('admin/dangnhap', 'UserController@getDangnhapAdmin');
+Route::post('admin/dangnhap', 'UserController@postDangnhapAdmin');
+Route::get('admin/dangxuatAdmin', 'UserController@getDangxuatAdmin');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function(){
 	Route::group(['prefix' => 'theloai'], function(){
 
 		Route::get('danhsach', 'TheLoaiController@list');
@@ -108,4 +112,11 @@ Route::group(['prefix' => 'admin'], function(){
 	Route::group(['prefix' => 'ajax'], function(){
 		Route::get('loaitin/{idTheLoai}', 'AjaxController@getLoaiTin');
 	});
+});
+
+
+//
+
+Route::get('trangchu', function(){
+	return view('pages.index');
 });
