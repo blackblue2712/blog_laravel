@@ -34,16 +34,22 @@
             <!-- Blog Comments -->
 
             <!-- Comments Form -->
+            @if(Auth::check())
             <div class="well">
                 <h4>Viết bình luận ...<span class="glyphicon glyphicon-pencil"></span></h4>
-                <form role="form">
+                <form action="binhluan/{{$tintuc->id}}/{{$tintuc->TieuDeKhongDau}}" method="POST" role="form">
                     <div class="form-group">
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea name="comment" class="form-control" rows="3"></textarea>
                     </div>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <button type="submit" class="btn btn-primary">Gửi</button>
                 </form>
             </div>
-
+            @else
+            <div class="well">
+                <samll>Bạn phải đăng nhập mới có thể viết bình luận <span class="glyphicon glyphicon-pencil"></span></small>
+            </div>
+            @endif
             <hr>
 
             <!-- Posted Comments -->

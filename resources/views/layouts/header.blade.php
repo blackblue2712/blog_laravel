@@ -22,17 +22,18 @@
                 </li>
             </ul>
 
-            <form class="navbar-form navbar-left" role="search">
+            <form action="timkiem" method="post" class="navbar-form navbar-left" role="search">
 		        <div class="form-group">
-		          <input type="text" class="form-control" placeholder="Search">
+		          <input type="text" class="form-control" placeholder="Search" name="tukhoa">
 		        </div>
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
 		        <button type="submit" class="btn btn-default">Submit</button>
 		    </form>
 
 		    <ul class="nav navbar-nav pull-right">
                 @if(Auth::check())
                     <li>
-                    	<a>
+                    	<a href="nguoidung">
                     		<span class ="glyphicon glyphicon-user"></span>
                     		{{Auth::user()->name}}
                     	</a>

@@ -125,9 +125,15 @@ Route::get('dangnhap', 'PagesController@getDangnhap');
 Route::post('dangnhap', 'PagesController@postDangnhap');
 Route::get('dangxuat', 'PagesController@getDangxuat');
 
+Route::get('nguoidung', 'PagesController@getNguoidung');
+Route::post('nguoidung', 'PagesController@postNguoiDung');
 
+Route::get('dangki', 'PagesController@getDangKi');
+Route::post('dangki', 'PagesController@postDangKi');
 
+Route::post('binhluan/{idTinTuc}/{tieuDeKhongDau}', 'PagesController@postBinhLuan');
 
+Route::post('timkiem', "PagesController@timkiem");
 
 
 
